@@ -1,0 +1,27 @@
+{
+  "name": "@urban-planner/doc-generator",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "pdfkit": "^0.14.0",
+    "docxtemplater": "^3.45.0",
+    "pizzip": "^3.1.6",
+    "exceljs": "^4.4.0",
+    "handlebars": "^4.7.8",
+    "chart.js": "^4.4.1",
+    "chartjs-node-canvas": "^4.1.6",
+    "date-fns": "^3.2.0",
+    "@turf/turf": "^6.5.0"
+  },
+  "devDependencies": {
+    "@types/pdfkit": "^0.13.4",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  }
+}
