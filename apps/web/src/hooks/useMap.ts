@@ -32,7 +32,7 @@ export const useMapInteractions = () => {
 
       // Check for feature clicks on visible layers
       const features = map.queryRenderedFeatures(event.point, {
-        layers: layers.filter((l) => l.visible).map((l) => l.id),
+        layers: layers.filter((l) => l.visible).flatMap(l => [`${l.id}-circle`, `${l.id}-line`, `${l.id}-fill`, `${l.id}-outline`]),
       });
 
       if (features.length > 0) {
