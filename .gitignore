@@ -1,0 +1,135 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+.pnpm-store/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+out/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode-server/
+*.iml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Testing
+coverage/
+.nyc_output/
+.jest/
+.vitest/
+
+# Temporary files
+tmp/
+temp/
+.cache/
+.next/
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Prisma
+prisma/migrations/
+.prisma/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Generated files
+*.generated.ts
+*.generated.js
+
+# Local development
+.local/
+local/
+
+# Uploads and files
+uploads/
+temp-uploads/
+downloads/
+
+# GTFS data
+gtfs-data/
+*.zip
+feeds/
+
+# Document generation temp files
+temp-docs/
+*.tmp.pdf
+*.tmp.docx
+*.tmp.xlsx
+
+# Browser extensions and other
+.pnp
+.pnp.js
+
+# Playwright/E2E tests
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Distribution packages
+*.tgz
+*.tar.gz
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Windows
+desktop.ini
+
+# IDE extensions
+.vscode/extensions/
+
+# Runtime cache
+.cache/
+cache/
+
+# Any local overrides
+.local/
+*.local.*
