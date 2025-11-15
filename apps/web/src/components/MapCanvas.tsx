@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Map, { NavigationControl, ScaleControl, GeolocateControl, FullscreenControl, Source, Layer } from 'react-map-gl';
 import type { MapRef, LayerProps } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { useMapStore, getMapboxStyle } from '../stores/mapStore';
+import { useMapStore, getMapboxStyle, MapStyle } from '../stores/mapStore';
 import { useMapInteractions, useMapLayers } from '../hooks/useMap';
 import LayerControl from './LayerControl';
 import DrawingTools from './DrawingTools';

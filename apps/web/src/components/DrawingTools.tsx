@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMapStore } from '../stores/mapStore';
 import { useDrawing } from '../hooks/useMap';
-import { Circle, Minus, Pentagon, Trash2, X, Download, MapPin } from 'lucide-react';
+import { Minus, Pentagon, Trash2, X, Download, MapPin } from 'lucide-react';
 import { calculateArea, calculateLength, formatArea, formatDistance } from '../lib/mapUtils';
 import type { LineString, Polygon } from 'geojson';
 

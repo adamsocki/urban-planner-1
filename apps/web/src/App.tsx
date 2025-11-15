@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import DocumentGenerator from './components/DocumentGenerator';
+import MapCanvas from './components/MapCanvas';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import { useTheme } from './contexts/ThemeContext';
 
@@ -66,27 +67,14 @@ function App() {
         </div>
       </header>
 
-      <main style={{ padding: '2rem 0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
-          {activeTab === 'map' ? (
-            <div style={{ 
-              padding: '3rem',
-              backgroundColor: theme.colors.surface,
-              borderRadius: '8px',
-              textAlign: 'center'
-            }}>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
-                🗺️ Interactive Map View
-              </h2>
-              <p style={{ color: theme.colors.textSecondary }}>
-                Map visualization coming soon! This will include GIS mapping, GTFS transit routes,
-                and interactive planning tools.
-              </p>
-            </div>
-          ) : (
+      <main style={{ padding: activeTab === 'map' ? '0' : '2rem 0' }}>
+        {activeTab === 'map' ? (
+          <MapCanvas />
+        ) : (
+          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
             <DocumentGenerator />
-          )}
-        </div>
+          </div>
+        )}
       </main>
 
       <footer style={{ 

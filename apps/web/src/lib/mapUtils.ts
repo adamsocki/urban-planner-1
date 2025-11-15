@@ -1,3 +1,4 @@
+// @ts-ignore - @turf/turf has type definitions but they're not resolved correctly by TypeScript with bundler module resolution
 import * as turf from '@turf/turf';
 import type { Feature, FeatureCollection, Point, LineString, Polygon, Position, GeoJsonProperties } from 'geojson';
 import type { LngLatBoundsLike } from 'mapbox-gl';
