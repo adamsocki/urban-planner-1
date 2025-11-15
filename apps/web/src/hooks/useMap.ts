@@ -91,36 +91,41 @@ export const useMapLayers = () => {
 
     // Update layer visibility and opacity
     layers.forEach((layer) => {
-      if (map.getLayer(layer.id)) {
-        map.setLayoutProperty(
-          layer.id,
-          'visibility',
-          layer.visible ? 'visible' : 'none'
-        );
+      // Update opacity based on layer type
+      if (layer.type === 'geojson') {
+        const visibility = layer.visible ? 'visible' : 'none';
 
-        // Update opacity based on layer type
-        if (layer.type === 'geojson') {
-          if (map.getLayer(`${layer.id}-fill`)) {
-            map.setPaintProperty(
-              `${layer.id}-fill`,
-              'fill-opacity',
-              layer.opacity
-            );
-          }
-          if (map.getLayer(`${layer.id}-line`)) {
-            map.setPaintProperty(
-              `${layer.id}-line`,
-              'line-opacity',
-              layer.opacity
-            );
-          }
-          if (map.getLayer(`${layer.id}-circle`)) {
-            map.setPaintProperty(
-              `${layer.id}-circle`,
-              'circle-opacity',
-              layer.opacity
-            );
-          }
+        if (map.getLayer(`${layer.id}-fill`)) {
+          map.setLayoutProperty(`${layer.id}-fill`, 'visibility', visibility);
+          map.setPaintProperty(
+            `${layer.id}-fill`,
+            'fill-opacity',
+            layer.opacity * 0.3
+          );
+        }
+        if (map.getLayer(`${layer.id}-line`)) {
+          map.setLayoutProperty(`${layer.id}-line`, 'visibility', visibility);
+          map.setPaintProperty(
+            `${layer.id}-line`,
+            'line-opacity',
+            layer.opacity
+          );
+        }
+        if (map.getLayer(`${layer.id}-circle`)) {
+          map.setLayoutProperty(`${layer.id}-circle`, 'visibility', visibility);
+          map.setPaintProperty(
+            `${layer.id}-circle`,
+            'circle-opacity',
+            layer.opacity
+          );
+        }
+        if (map.getLayer(`${layer.id}-outline`)) {
+          map.setLayoutProperty(`${layer.id}-outline`, 'visibility', visibility);
+          map.setPaintProperty(
+            `${layer.id}-outline`,
+            'line-opacity',
+            layer.opacity
+          );
         }
       }
     });
