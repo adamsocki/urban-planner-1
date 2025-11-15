@@ -2,10 +2,13 @@
  * Main App Component
  */
 
-import React from 'react';
 import DocumentGenerator from './components/DocumentGenerator';
+import ThemeSwitcher from './components/ThemeSwitcher';
+import { useTheme } from './contexts/ThemeContext';
 
 function App() {
+  const { theme } = useTheme();
+
   return (
     <div className="app">
       <header className="app-header">
@@ -30,6 +33,8 @@ function App() {
         </div>
       </footer>
 
+      <ThemeSwitcher />
+
       <style>{`
         * {
           box-sizing: border-box;
@@ -38,69 +43,118 @@ function App() {
         }
 
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-            'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-            sans-serif;
+          font-family: var(--typography-fontFamily);
+          font-weight: var(--typography-bodyWeight);
+          font-size: var(--typography-baseFontSize);
+          letter-spacing: var(--typography-letterSpacing);
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
-          background-color: #f7fafc;
+          background: var(--color-background);
+          color: var(--color-text);
+          transition: var(--effect-transition);
         }
+
+        ${theme.effects.pattern ? `
+        body::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: ${theme.effects.pattern};
+          pointer-events: none;
+          z-index: 0;
+        }
+        ` : ''}
 
         .app {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
+          position: relative;
+          z-index: 1;
         }
 
         .app-header {
-          background-color: #2d3748;
-          color: white;
-          padding: 1rem 0;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          background: var(--color-primary);
+          color: var(--color-textInverse);
+          padding: var(--spacing-medium) 0;
+          box-shadow: var(--shadow-medium);
+          border-bottom: 2px solid var(--color-border);
+          backdrop-filter: blur(var(--effect-blur, 0px));
+          transition: var(--effect-transition);
         }
 
         .container {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 0 1rem;
+          padding: 0 var(--spacing-medium);
         }
 
         .logo {
-          font-size: 1.5rem;
-          font-weight: 700;
-          margin-bottom: 0.5rem;
+          font-family: var(--typography-headingFamily);
+          font-weight: var(--typography-headingWeight);
+          font-size: 2rem;
+          margin-bottom: var(--spacing-small);
+          letter-spacing: var(--typography-letterSpacing);
         }
 
         nav {
           display: flex;
-          gap: 2rem;
+          gap: var(--spacing-medium);
+          flex-wrap: wrap;
         }
 
         nav a {
-          color: #cbd5e0;
+          color: var(--color-textInverse);
           text-decoration: none;
           font-weight: 500;
-          transition: color 0.2s;
+          transition: var(--effect-transition);
+          padding: var(--spacing-base) var(--spacing-small);
+          border-radius: var(--radius-small);
+          border: 2px solid transparent;
         }
 
         nav a:hover {
-          color: white;
+          background: var(--color-primaryLight);
+          border-color: var(--color-accent);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-hover);
         }
 
         main {
           flex: 1;
-          padding: 2rem 0;
+          padding: var(--spacing-large) 0;
+          background: var(--color-backgroundSecondary);
         }
 
         .app-footer {
-          background-color: #2d3748;
-          color: #cbd5e0;
-          padding: 2rem 0;
-          margin-top: 4rem;
+          background: var(--color-primaryDark);
+          color: var(--color-textInverse);
+          padding: var(--spacing-large) 0;
+          margin-top: var(--spacing-xlarge);
+          border-top: 2px solid var(--color-border);
         }
 
         .app-footer p {
           text-align: center;
+          opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+          .logo {
+            font-size: 1.5rem;
+          }
+
+          nav {
+            gap: var(--spacing-small);
+          }
+
+          nav a {
+            font-size: 14px;
+            padding: var(--spacing-base);
+          }
         }
       `}</style>
     </div>
