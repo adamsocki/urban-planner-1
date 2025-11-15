@@ -15,7 +15,7 @@ dotenv.config();
 // Import routes
 import documentRoutes from './routes/documents';
 
-const app = express();
+const app: express.Application = express();
 const PORT = process.env.API_PORT || 3000;
 
 // Middleware

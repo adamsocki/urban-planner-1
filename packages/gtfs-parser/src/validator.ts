@@ -5,11 +5,11 @@
  * https://gtfs.org/schedule/reference/
  */
 
-import { GTFSFeed, ValidationResult, ValidationError, FeedStats, RouteType } from './types';
+import { GTFSFeed, ValidationResult, ValidationError, ValidationWarning, FeedStats, RouteType } from './types';
 
 export function validateGTFS(feed: GTFSFeed): ValidationResult {
   const errors: ValidationError[] = [];
-  const warnings: ValidationError[] = [];
+  const warnings: ValidationWarning[] = [];
 
   // Check required files
   if (!feed.agency || feed.agency.length === 0) {

@@ -1,55 +1,52 @@
 # Dependencies
 node_modules/
 pnpm-lock.yaml
-<<<<<<< HEAD
 .pnpm-store/
-=======
->>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
 package-lock.json
 yarn.lock
 
 # Build outputs
 dist/
 build/
-<<<<<<< HEAD
 .turbo/
 *.tsbuildinfo
 out/
-=======
-*.tsbuildinfo
->>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# Exclude build artifacts from src directories
+packages/*/src/**/*.js
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.d.ts.map
+apps/*/src/**/*.js
+apps/*/src/**/*.js.map
+apps/*/src/**/*.d.ts
+apps/*/src/**/*.d.ts.map
 
 # Environment variables
 .env
 .env.local
 .env.*.local
-<<<<<<< HEAD
 .env.production.local
 .env.development.local
 
 # IDE & Editor
-=======
-
-# IDE
->>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
-<<<<<<< HEAD
 .vscode-server/
 *.iml
-=======
->>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
 
 # Logs
 logs/
 *.log
 npm-debug.log*
 pnpm-debug.log*
-<<<<<<< HEAD
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
@@ -80,6 +77,9 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+.AppleDouble
+.LSOverride
+desktop.ini
 
 # Prisma
 prisma/migrations/
@@ -132,13 +132,6 @@ playwright/.cache/
 *.tgz
 *.tar.gz
 
-# macOS
-.AppleDouble
-.LSOverride
-
-# Windows
-desktop.ini
-
 # IDE extensions
 .vscode/extensions/
 
@@ -149,16 +142,3 @@ cache/
 # Any local overrides
 .local/
 *.local.*
-=======
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Prisma
-.prisma/
-
-# Temp files
-*.tmp
-.cache/
->>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6

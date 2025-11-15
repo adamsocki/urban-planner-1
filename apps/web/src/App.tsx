@@ -2,7 +2,6 @@
  * Main App Component
  */
 
-import React from 'react';
 import DocumentGenerator from './components/DocumentGenerator';
 
 function App() {

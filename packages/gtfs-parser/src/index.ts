@@ -6,7 +6,5 @@
  */
 
 export * from './types';
-export * from './parser';
 export * from './validator';
-export * from './analyzer';
 export { GTFSImporter } from './importer';

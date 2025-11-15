@@ -6,7 +6,7 @@ import express from 'express';
 import { generateDocument } from '@urban-planner/doc-generator';
 import { DocumentData, GenerationOptions } from '@urban-planner/doc-generator';
 
-const router = express.Router();
+const router: express.Router = express.Router();
 
 /**
  * POST /api/documents/generate
@@ -34,7 +34,7 @@ router.post('/generate', async (req, res) => {
     }
 
     // Set appropriate content type
-    const contentTypes = {
+    const contentTypes: Record<string, string> = {
       pdf: 'application/pdf',
       docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
