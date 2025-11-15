@@ -180,7 +180,7 @@ const MapCanvas: React.FC = () => {
       <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-2 z-10">
         <select
           value={mapStyle}
-          onChange={(e) => useMapStore.getState().setMapStyle(e.target.value as any)}
+          onChange={(e) => useMapStore.getState().setMapStyle(e.target.value as MapStyle)}
           className="text-sm border-none outline-none cursor-pointer"
         >
           <option value="streets">Streets</option>
