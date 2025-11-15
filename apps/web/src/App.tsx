@@ -2,26 +2,78 @@
  * Main App Component
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import DocumentGenerator from './components/DocumentGenerator';
+import CensusDataTool from './components/CensusDataTool';
+
+type View = 'generator' | 'census' | 'maps' | 'transit' | 'forecasting';
 
 function App() {
+  const [activeView, setActiveView] = useState<View>('census');
+
   return (
     <div className="app">
       <header className="app-header">
         <div className="container">
           <h1 className="logo">Urban Planning Platform</h1>
           <nav>
-            <a href="#generator">Document Generator</a>
-            <a href="#maps">Maps</a>
-            <a href="#transit">Transit</a>
-            <a href="#forecasting">Forecasting</a>
+            <a
+              href="#generator"
+              onClick={(e) => { e.preventDefault(); setActiveView('generator'); }}
+              className={activeView === 'generator' ? 'active' : ''}
+            >
+              Document Generator
+            </a>
+            <a
+              href="#census"
+              onClick={(e) => { e.preventDefault(); setActiveView('census'); }}
+              className={activeView === 'census' ? 'active' : ''}
+            >
+              Census Data
+            </a>
+            <a
+              href="#maps"
+              onClick={(e) => { e.preventDefault(); setActiveView('maps'); }}
+              className={activeView === 'maps' ? 'active' : ''}
+            >
+              Maps
+            </a>
+            <a
+              href="#transit"
+              onClick={(e) => { e.preventDefault(); setActiveView('transit'); }}
+              className={activeView === 'transit' ? 'active' : ''}
+            >
+              Transit
+            </a>
+            <a
+              href="#forecasting"
+              onClick={(e) => { e.preventDefault(); setActiveView('forecasting'); }}
+              className={activeView === 'forecasting' ? 'active' : ''}
+            >
+              Forecasting
+            </a>
           </nav>
         </div>
       </header>
 
-      <main>
-        <DocumentGenerator />
+      <main style={{ padding: activeView === 'census' ? 0 : '2rem 0' }}>
+        {activeView === 'generator' && <DocumentGenerator />}
+        {activeView === 'census' && <CensusDataTool />}
+        {activeView === 'maps' && (
+          <div className="container">
+            <h2>Maps - Coming Soon</h2>
+          </div>
+        )}
+        {activeView === 'transit' && (
+          <div className="container">
+            <h2>Transit - Coming Soon</h2>
+          </div>
+        )}
+        {activeView === 'forecasting' && (
+          <div className="container">
+            <h2>Forecasting - Coming Soon</h2>
+          </div>
+        )}
       </main>
 
       <footer className="app-footer">
@@ -81,10 +133,17 @@ function App() {
           text-decoration: none;
           font-weight: 500;
           transition: color 0.2s;
+          cursor: pointer;
         }
 
         nav a:hover {
           color: white;
+        }
+
+        nav a.active {
+          color: white;
+          border-bottom: 2px solid #4299e1;
+          padding-bottom: 4px;
         }
 
         main {

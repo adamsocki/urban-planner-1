@@ -14,6 +14,7 @@ dotenv.config();
 
 // Import routes
 import documentRoutes from './routes/documents';
+import censusRoutes from './routes/census';
 
 const app = express();
 const PORT = process.env.API_PORT || 3000;
@@ -42,6 +43,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/documents', documentRoutes);
+app.use('/api/census', censusRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -64,6 +66,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 app.listen(PORT, () => {
   console.log(`🚀 Urban Planning API server running on port ${PORT}`);
   console.log(`📝 Document generation: http://localhost:${PORT}/api/documents`);
+  console.log(`📊 Census data: http://localhost:${PORT}/api/census`);
   console.log(`❤️  Health check: http://localhost:${PORT}/health`);
 });
 

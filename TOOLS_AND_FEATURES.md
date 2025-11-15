@@ -172,6 +172,333 @@ For live transit updates:
 - **Use cases**: Vehicle positions, arrival predictions, service alerts
 - **Integration**: Combine static GTFS with real-time feeds
 
+## 📊 Census Data Tools
+
+The platform includes comprehensive tools for gathering and analyzing US Census Bureau data, essential for understanding demographic patterns, economic conditions, and transportation needs in urban planning.
+
+### Census Data Package
+
+**Location**: `/packages/census-data/`
+
+A TypeScript library for fetching demographic, economic, and housing data from the US Census Bureau API with geographic query capabilities.
+
+#### Features
+- 📍 Spatial queries by point, bounding box, or polygon
+- 🔄 Automatic data parsing and structuring
+- 💾 Built-in caching for performance
+- 📝 Full TypeScript support with comprehensive types
+- 🎯 Multiple geographic levels (state, county, tract, block group)
+- 📤 Export to JSON, CSV, and GeoJSON formats
+
+#### Census API Client
+
+```typescript
+import { CensusClient, CENSUS_VARIABLES } from '@urban-planner/census-data';
+
+// Initialize the client
+const client = new CensusClient({
+  apiKey: process.env.CENSUS_API_KEY,
+  cache: true,
+  cacheTTL: 3600000, // 1 hour
+});
+
+// Fetch census data for a census tract
+const response = await client.getCensusData({
+  variables: [
+    CENSUS_VARIABLES.TOTAL_POPULATION,
+    CENSUS_VARIABLES.MEDIAN_HOUSEHOLD_INCOME,
+    CENSUS_VARIABLES.PUBLIC_TRANSIT,
+  ],
+  geography: {
+    type: 'tract',
+    state: '06',      // California
+    county: '075',    // San Francisco
+    tract: '612000',
+  },
+  year: 2021,
+  dataset: 'acs5',
+});
+
+console.log(response.data.population.total);
+console.log(response.data.income.medianHouseholdIncome);
+console.log(response.data.transportation.publicTransit);
+```
+
+#### Available Data Categories
+
+**Population & Demographics**
+- Total population (by gender, age groups)
+- Median age
+- Race and ethnicity distribution
+
+**Housing**
+- Total housing units
+- Vacancy rates
+- Homeownership rates
+- Owner vs. renter occupied
+
+**Economic**
+- Median household income
+- Per capita income
+- Poverty rates
+- Employment statistics
+
+**Transportation**
+- Commute mode share (car, transit, bike, walk, work-from-home)
+- Total workers
+- Transportation mode breakdown
+
+**Education**
+- Educational attainment levels
+- High school graduation rates
+- College degrees
+
+#### Spatial Query Examples
+
+**Query by Point** (Click on Map)
+```typescript
+import { SpatialCensusQuery } from '@urban-planner/census-data';
+
+const spatialQuery = new SpatialCensusQuery(client);
+
+// Get census data for a specific lat/lon
+const result = await spatialQuery.query({
+  type: 'point',
+  coordinates: {
+    latitude: 37.7749,
+    longitude: -122.4194,
+  },
+  level: 'tract',
+  year: 2021,
+});
+
+// Returns census data for the tract containing these coordinates
+console.log(result.features[0].properties.population.total);
+```
+
+**Query by Bounding Box** (Draw Area)
+```typescript
+const result = await spatialQuery.query({
+  type: 'bbox',
+  boundingBox: {
+    north: 37.8,
+    south: 37.7,
+    east: -122.3,
+    west: -122.5,
+  },
+  level: 'tract',
+  year: 2021,
+});
+
+// Returns census data for all tracts within the area
+console.log(`Found ${result.count} census tracts`);
+result.features.forEach(feature => {
+  const data = feature.properties;
+  console.log(`Population: ${data.population.total}`);
+  console.log(`Median Income: $${data.income.medianHouseholdIncome}`);
+});
+```
+
+**Batch Queries** (Multiple Locations)
+```typescript
+const batchResult = await client.getBatchCensusData({
+  geographies: [
+    { type: 'county', state: '06', county: '075' }, // San Francisco
+    { type: 'county', state: '06', county: '001' }, // Alameda
+    { type: 'county', state: '06', county: '081' }, // San Mateo
+  ],
+  variables: [
+    CENSUS_VARIABLES.TOTAL_POPULATION,
+    CENSUS_VARIABLES.MEDIAN_HOUSEHOLD_INCOME,
+    CENSUS_VARIABLES.PUBLIC_TRANSIT,
+  ],
+  year: 2021,
+});
+```
+
+### Census Data Tool (Web UI)
+
+**Location**: `/apps/web/src/components/CensusDataTool.tsx`
+
+Interactive map-based interface for gathering census data within geographic areas.
+
+#### Features
+- 🗺️ Interactive map with Mapbox GL
+- 📍 Point-and-click census data queries
+- ⬜ Draw bounding boxes for area queries
+- 📊 Real-time data visualization
+- 💾 Export to JSON, CSV, or GeoJSON
+- 🎯 Multiple geography levels (county, tract, block group)
+
+#### Usage
+
+1. **Access the Tool**: Navigate to "Census Data" in the application menu
+2. **Select Query Mode**:
+   - **Point**: Click anywhere on the map to get census data for that location
+   - **Bounding Box**: Click and drag to draw a rectangular area
+3. **Choose Geography Level**:
+   - **County**: Larger areas, less detailed
+   - **Census Tract**: Neighborhood-level detail (recommended)
+   - **Block Group**: Most detailed, smaller areas
+4. **View Results**: Demographics, housing, income, transportation, and employment data
+5. **Export Data**: Download as JSON, CSV, or GeoJSON for further analysis
+
+### API Endpoints
+
+The backend provides RESTful endpoints for census data:
+
+```
+POST   /api/census/query          # Query by geographic area
+POST   /api/census/batch          # Batch queries for multiple areas
+POST   /api/census/spatial        # Spatial queries (point, bbox, polygon)
+GET    /api/census/variables      # List available census variables
+GET    /api/census/variable-list  # Get commonly used variables
+POST   /api/census/export         # Export data to various formats
+DELETE /api/census/cache          # Clear census data cache
+```
+
+### Census Data Use Cases in Urban Planning
+
+#### 1. Transit Equity Analysis
+```typescript
+// Compare transit service levels with demographic data
+const transitEquity = {
+  lowIncomeAreas: {
+    medianIncome: 45000,
+    transitAccess: 85%, // within 400m of transit
+    serviceFrequency: 8, // trips/hour
+  },
+  highIncomeAreas: {
+    medianIncome: 120000,
+    transitAccess: 95%,
+    serviceFrequency: 12,
+  },
+};
+```
+
+#### 2. Ridership Forecasting
+```typescript
+// Use census data to predict transit ridership
+const forecast = calculateRidership({
+  population: censusData.population.total,
+  employment: censusData.employment.employed,
+  density: censusData.population.total / areaKm2,
+  medianIncome: censusData.income.medianHouseholdIncome,
+  existingTransitMode: censusData.transportation.publicTransit,
+});
+```
+
+#### 3. Service Gap Analysis
+```typescript
+// Identify underserved areas
+const gaps = analyzeServiceGaps({
+  census: censusTracts,
+  transitStops: gtfsStops,
+  walkDistance: 400, // meters
+  minimumFrequency: 6, // trips/hour
+});
+
+// Returns areas with:
+// - High population density
+// - Low transit access
+// - High transit dependency (low car ownership)
+```
+
+#### 4. Development Impact Assessment
+```typescript
+// Assess impact of new transit on area
+const impact = {
+  beforeDevelopment: {
+    population: 15000,
+    medianIncome: 65000,
+    transitCommuters: 1200,
+  },
+  afterDevelopment: {
+    projectedPopulation: 22000,
+    projectedIncome: 75000,
+    projectedTransitCommuters: 3500,
+  },
+  percentIncrease: 192%, // transit ridership
+};
+```
+
+### Data Sources
+
+**US Census Bureau API**
+- **American Community Survey (ACS)**: 5-year and 1-year estimates
+- **Decennial Census**: Complete population count
+- **Datasets**: Demographics, economics, housing, transportation
+- **API Key**: Free, required for access (https://api.census.gov/data/key_signup.html)
+
+**Geographic Coverage**
+- All 50 US states + DC, Puerto Rico, territories
+- Multiple geographic levels from state to block group
+- TIGER/Line shapefiles for boundaries
+
+**Update Frequency**
+- ACS 5-year: Updated annually
+- ACS 1-year: Updated annually (larger geographies only)
+- Decennial Census: Every 10 years (2020, 2030, etc.)
+
+### Configuration
+
+Add to `.env`:
+```bash
+CENSUS_API_KEY=your_census_api_key_here
+```
+
+Get a free API key: https://api.census.gov/data/key_signup.html
+
+### Best Practices
+
+1. **Use ACS 5-year estimates** for most analyses (more reliable, all geographies)
+2. **Cache queries** to reduce API calls and improve performance
+3. **Choose appropriate geography level**:
+   - County: Regional analysis
+   - Tract: Neighborhood analysis (most common)
+   - Block Group: Detailed micro-analysis
+4. **Consider margins of error** in ACS estimates
+5. **Combine with GTFS data** for comprehensive transit planning
+
+### Integration with Other Tools
+
+**Document Generation**
+```typescript
+// Include census data in planning reports
+const report = generateDocument({
+  demographics: censusData,
+  transitData: gtfsData,
+  template: 'comprehensive-plan',
+});
+```
+
+**Ridership Forecasting**
+```typescript
+// Use census data as input for forecasting models
+const forecast = forecastRidership({
+  demographicData: censusData,
+  transitNetwork: gtfsData,
+  landUse: gisData,
+});
+```
+
+**GIS Visualization**
+```typescript
+// Visualize census data on maps
+const layer = {
+  type: 'fill',
+  paint: {
+    'fill-color': [
+      'interpolate',
+      ['linear'],
+      ['get', 'population_density'],
+      0, '#ffffff',
+      1000, '#ff0000',
+    ],
+  },
+};
+```
+
 ## 📄 Document Generation Tools
 
 ### PDF Generation
