@@ -1,0 +1,29 @@
+{
+  "name": "@urban-planner/forecasting",
+  "version": "0.1.0",
+  "description": "Ridership forecasting models and analysis tools for transit planning",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "ridership",
+    "forecasting",
+    "transit",
+    "urban-planning",
+    "machine-learning"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@turf/turf": "^6.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tsup": "^7.0.0"
+  }
+}
