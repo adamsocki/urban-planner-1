@@ -4,10 +4,14 @@
 
 import React, { useState } from 'react';
 import DocumentGenerator from './components/DocumentGenerator';
+import GeospatialAnalyzer from './components/GeospatialAnalyzer';
 import { SettingsModal } from './components/SettingsModal';
+
+type ViewType = 'generator' | 'geospatial';
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<ViewType>('generator');
 
   return (
     <div className="app">
@@ -17,10 +21,28 @@ function App() {
             <h1 className="logo">Urban Planning Platform</h1>
             <div className="header-right">
               <nav>
-                <a href="#generator">Document Generator</a>
+                <a
+                  href="#generator"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentView('generator');
+                  }}
+                  className={currentView === 'generator' ? 'active' : ''}
+                >
+                  Document Generator
+                </a>
+                <a
+                  href="#geospatial"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentView('geospatial');
+                  }}
+                  className={currentView === 'geospatial' ? 'active' : ''}
+                >
+                  🗺️ Geospatial AI
+                </a>
                 <a href="#maps">Maps</a>
                 <a href="#transit">Transit</a>
-                <a href="#forecasting">Forecasting</a>
               </nav>
               <button
                 className="settings-button"
@@ -40,7 +62,8 @@ function App() {
       />
 
       <main>
-        <DocumentGenerator />
+        {currentView === 'generator' && <DocumentGenerator />}
+        {currentView === 'geospatial' && <GeospatialAnalyzer />}
       </main>
 
       <footer className="app-footer">
@@ -111,10 +134,17 @@ function App() {
           text-decoration: none;
           font-weight: 500;
           transition: color 0.2s;
+          cursor: pointer;
         }
 
         nav a:hover {
           color: white;
+        }
+
+        nav a.active {
+          color: white;
+          border-bottom: 2px solid #4299e1;
+          padding-bottom: 4px;
         }
 
         .settings-button {
