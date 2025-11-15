@@ -2,26 +2,94 @@
  * Main App Component
  */
 
-import React from 'react';
+import { useState } from 'react';
 import DocumentGenerator from './components/DocumentGenerator';
+import Settings from './components/Settings';
+
+type Page = 'generator' | 'maps' | 'transit' | 'forecasting' | 'settings';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<Page>('generator');
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'generator':
+        return <DocumentGenerator />;
+      case 'settings':
+        return <Settings />;
+      case 'maps':
+        return (
+          <div style={{ padding: '2rem', textAlign: 'center' }}>
+            <h2>Maps</h2>
+            <p>Maps functionality coming soon...</p>
+          </div>
+        );
+      case 'transit':
+        return (
+          <div style={{ padding: '2rem', textAlign: 'center' }}>
+            <h2>Transit Analysis</h2>
+            <p>Transit analysis functionality coming soon...</p>
+          </div>
+        );
+      case 'forecasting':
+        return (
+          <div style={{ padding: '2rem', textAlign: 'center' }}>
+            <h2>Forecasting</h2>
+            <p>Forecasting functionality coming soon...</p>
+          </div>
+        );
+      default:
+        return <DocumentGenerator />;
+    }
+  };
+
   return (
     <div className="app">
       <header className="app-header">
         <div className="container">
           <h1 className="logo">Urban Planning Platform</h1>
           <nav>
-            <a href="#generator">Document Generator</a>
-            <a href="#maps">Maps</a>
-            <a href="#transit">Transit</a>
-            <a href="#forecasting">Forecasting</a>
+            <a
+              href="#generator"
+              onClick={(e) => { e.preventDefault(); setCurrentPage('generator'); }}
+              className={currentPage === 'generator' ? 'active' : ''}
+            >
+              Document Generator
+            </a>
+            <a
+              href="#maps"
+              onClick={(e) => { e.preventDefault(); setCurrentPage('maps'); }}
+              className={currentPage === 'maps' ? 'active' : ''}
+            >
+              Maps
+            </a>
+            <a
+              href="#transit"
+              onClick={(e) => { e.preventDefault(); setCurrentPage('transit'); }}
+              className={currentPage === 'transit' ? 'active' : ''}
+            >
+              Transit
+            </a>
+            <a
+              href="#forecasting"
+              onClick={(e) => { e.preventDefault(); setCurrentPage('forecasting'); }}
+              className={currentPage === 'forecasting' ? 'active' : ''}
+            >
+              Forecasting
+            </a>
+            <a
+              href="#settings"
+              onClick={(e) => { e.preventDefault(); setCurrentPage('settings'); }}
+              className={currentPage === 'settings' ? 'active' : ''}
+            >
+              Settings
+            </a>
           </nav>
         </div>
       </header>
 
       <main>
-        <DocumentGenerator />
+        {renderPage()}
       </main>
 
       <footer className="app-footer">
@@ -85,6 +153,11 @@ function App() {
 
         nav a:hover {
           color: white;
+        }
+
+        nav a.active {
+          color: white;
+          border-bottom: 2px solid #4299e1;
         }
 
         main {
