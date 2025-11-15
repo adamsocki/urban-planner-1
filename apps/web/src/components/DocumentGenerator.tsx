@@ -333,190 +333,238 @@ export const DocumentGenerator: React.FC = () => {
 
       <style>{`
         .document-generator {
-          padding: 2rem;
+          padding: var(--spacing-large);
           max-width: 1200px;
           margin: 0 auto;
         }
 
-        h1 {
+        .document-generator h1 {
+          font-family: var(--typography-headingFamily);
+          font-weight: var(--typography-headingWeight);
           font-size: 2.5rem;
-          margin-bottom: 0.5rem;
-          color: #1a202c;
+          margin-bottom: var(--spacing-small);
+          color: var(--color-text);
         }
 
         .subtitle {
           font-size: 1.125rem;
-          color: #718096;
-          margin-bottom: 2rem;
+          color: var(--color-textSecondary);
+          margin-bottom: var(--spacing-large);
         }
 
         .alert {
-          padding: 1rem;
-          border-radius: 0.5rem;
-          margin-bottom: 1.5rem;
+          padding: var(--spacing-medium);
+          border-radius: var(--radius-medium);
+          margin-bottom: var(--spacing-medium);
+          backdrop-filter: blur(var(--effect-blur, 0px));
         }
 
         .alert-error {
-          background-color: #fed7d7;
-          color: #9b2c2c;
-          border: 1px solid #fc8181;
+          background-color: var(--color-error);
+          color: var(--color-textInverse);
+          border: 2px solid var(--color-border);
+          box-shadow: var(--shadow-medium);
+        }
+
+        .alert-error strong {
+          font-weight: 700;
         }
 
         .form-section {
-          margin-bottom: 3rem;
+          margin-bottom: var(--spacing-xlarge);
         }
 
         .form-section h2 {
-          font-size: 1.5rem;
-          margin-bottom: 1rem;
-          color: #2d3748;
+          font-family: var(--typography-headingFamily);
+          font-weight: var(--typography-headingWeight);
+          font-size: 1.75rem;
+          margin-bottom: var(--spacing-medium);
+          color: var(--color-text);
+          border-bottom: 3px solid var(--color-primary);
+          padding-bottom: var(--spacing-small);
         }
 
         .template-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 1rem;
+          gap: var(--spacing-medium);
         }
 
         .template-card {
-          border: 2px solid #e2e8f0;
-          border-radius: 0.5rem;
-          padding: 1.5rem;
+          border: 2px solid var(--color-borderLight);
+          border-radius: var(--radius-large);
+          padding: var(--spacing-medium);
           cursor: pointer;
-          transition: all 0.2s;
+          transition: var(--effect-transition);
+          background: var(--color-surface);
+          backdrop-filter: blur(var(--effect-blur, 0px));
+          box-shadow: var(--shadow-small);
         }
 
         .template-card:hover {
-          border-color: #4299e1;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          border-color: var(--color-primary);
+          box-shadow: var(--shadow-hover);
+          transform: translateY(-4px);
         }
 
         .template-card.selected {
-          border-color: #3182ce;
-          background-color: #ebf8ff;
+          border-color: var(--color-primary);
+          background: var(--color-surfaceHover);
+          box-shadow: var(--shadow-medium);
+          border-width: 3px;
         }
 
         .template-card h3 {
-          font-size: 1.125rem;
-          margin-bottom: 0.5rem;
-          color: #2d3748;
+          font-family: var(--typography-headingFamily);
+          font-weight: var(--typography-headingWeight);
+          font-size: 1.25rem;
+          margin-bottom: var(--spacing-base);
+          color: var(--color-text);
         }
 
         .template-card p {
-          font-size: 0.875rem;
-          color: #718096;
-          margin-bottom: 1rem;
+          font-size: 0.95rem;
+          color: var(--color-textSecondary);
+          margin-bottom: var(--spacing-medium);
+          line-height: 1.5;
         }
 
         .formats {
           display: flex;
-          gap: 0.5rem;
+          gap: var(--spacing-base);
+          flex-wrap: wrap;
         }
 
         .format-badge {
           display: inline-block;
-          padding: 0.25rem 0.5rem;
-          background-color: #edf2f7;
-          border-radius: 0.25rem;
+          padding: 0.25rem 0.75rem;
+          background: var(--color-accent);
+          border-radius: var(--radius-full);
           font-size: 0.75rem;
-          font-weight: 600;
-          color: #4a5568;
+          font-weight: 700;
+          color: var(--color-textInverse);
+          border: 1px solid var(--color-border);
+          box-shadow: var(--shadow-small);
         }
 
         .format-selector {
           display: flex;
-          gap: 1rem;
+          gap: var(--spacing-medium);
+          flex-wrap: wrap;
         }
 
         .format-button {
-          padding: 0.75rem 1.5rem;
-          border: 2px solid #e2e8f0;
-          border-radius: 0.5rem;
-          background-color: white;
+          padding: var(--spacing-small) var(--spacing-medium);
+          border: 2px solid var(--color-border);
+          border-radius: var(--radius-medium);
+          background: var(--color-surface);
           cursor: pointer;
           font-weight: 600;
-          transition: all 0.2s;
+          font-family: var(--typography-fontFamily);
+          transition: var(--effect-transition);
+          color: var(--color-text);
+          box-shadow: var(--shadow-small);
         }
 
         .format-button:hover {
-          border-color: #4299e1;
+          border-color: var(--color-primary);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-hover);
         }
 
         .format-button.active {
-          border-color: #3182ce;
-          background-color: #3182ce;
-          color: white;
+          border-color: var(--color-primary);
+          background: var(--color-primary);
+          color: var(--color-textInverse);
+          box-shadow: var(--shadow-medium);
         }
 
         .form-group {
-          margin-bottom: 1.5rem;
+          margin-bottom: var(--spacing-medium);
         }
 
         .form-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1rem;
+          gap: var(--spacing-medium);
         }
 
         label {
           display: block;
-          margin-bottom: 0.5rem;
+          margin-bottom: var(--spacing-base);
           font-weight: 600;
-          color: #2d3748;
+          color: var(--color-text);
+          font-family: var(--typography-fontFamily);
         }
 
         input,
         textarea {
           width: 100%;
-          padding: 0.75rem;
-          border: 1px solid #e2e8f0;
-          border-radius: 0.375rem;
+          padding: var(--spacing-small);
+          border: 2px solid var(--color-borderLight);
+          border-radius: var(--radius-medium);
           font-size: 1rem;
-          transition: border-color 0.2s;
+          font-family: var(--typography-fontFamily);
+          transition: var(--effect-transition);
+          background: var(--color-surface);
+          color: var(--color-text);
+          backdrop-filter: blur(var(--effect-blur, 0px));
         }
 
         input:focus,
         textarea:focus {
           outline: none;
-          border-color: #4299e1;
-          box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+          border-color: var(--color-primary);
+          box-shadow: var(--shadow-hover);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+          color: var(--color-textSecondary);
+          opacity: 0.7;
         }
 
         textarea {
           resize: vertical;
-          font-family: inherit;
+          font-family: var(--typography-fontFamily);
         }
 
         .generate-button {
-          padding: 1rem 2rem;
-          background-color: #3182ce;
-          color: white;
-          border: none;
-          border-radius: 0.5rem;
-          font-size: 1.125rem;
-          font-weight: 600;
+          padding: var(--spacing-medium) var(--spacing-large);
+          background: var(--color-primary);
+          color: var(--color-textInverse);
+          border: 2px solid var(--color-border);
+          border-radius: var(--radius-large);
+          font-size: 1.25rem;
+          font-weight: 700;
+          font-family: var(--typography-headingFamily);
           cursor: pointer;
-          transition: background-color 0.2s;
+          transition: var(--effect-transition);
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: var(--spacing-small);
+          box-shadow: var(--shadow-medium);
         }
 
         .generate-button:hover:not(:disabled) {
-          background-color: #2c5aa0;
+          background: var(--color-primaryDark);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-large);
         }
 
         .generate-button:disabled {
-          background-color: #cbd5e0;
+          background: var(--color-borderLight);
+          color: var(--color-textSecondary);
           cursor: not-allowed;
+          opacity: 0.6;
         }
 
         .spinner {
           display: inline-block;
           width: 1rem;
           height: 1rem;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top-color: white;
+          border: 2px solid var(--color-textInverse);
+          border-top-color: transparent;
           border-radius: 50%;
           animation: spin 0.6s linear infinite;
         }
@@ -524,6 +572,20 @@ export const DocumentGenerator: React.FC = () => {
         @keyframes spin {
           to {
             transform: rotate(360deg);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .document-generator {
+            padding: var(--spacing-medium);
+          }
+
+          .form-row {
+            grid-template-columns: 1fr;
+          }
+
+          .template-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
