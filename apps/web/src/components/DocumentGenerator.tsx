@@ -4,6 +4,8 @@
  */
 
 import React, { useState } from 'react';
+import { useSettingsStore } from '../stores/settingsStore';
+import { LLMService } from '../services/llmService';
 
 interface DocumentTemplate {
   id: string;
@@ -25,6 +27,7 @@ interface DocumentData {
 }
 
 export const DocumentGenerator: React.FC = () => {
+  const { llmSettings, isConfigured } = useSettingsStore();
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [selectedFormat, setSelectedFormat] = useState<'pdf' | 'docx'>('pdf');
   const [formData, setFormData] = useState<DocumentData>({
@@ -38,6 +41,7 @@ export const DocumentGenerator: React.FC = () => {
     recommendations: '',
   });
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generatingField, setGeneratingField] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const templates: DocumentTemplate[] = [
@@ -83,6 +87,35 @@ export const DocumentGenerator: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleGenerateField = async (fieldName: string) => {
+    if (!isConfigured()) {
+      alert('Please configure your LLM API settings first (click the Settings button in the header)');
+      return;
+    }
+
+    setGeneratingField(fieldName);
+    setError(null);
+
+    try {
+      const selectedTemplateObj = templates.find((t) => t.id === selectedTemplate);
+      const documentType = selectedTemplateObj?.name || 'urban planning';
+
+      const response = await LLMService.generateSection({
+        section: fieldName,
+        documentType,
+        existingData: formData,
+        apiConfig: llmSettings,
+      });
+
+      setFormData((prev) => ({ ...prev, [fieldName]: response.content }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate content');
+      console.error('LLM generation error:', err);
+    } finally {
+      setGeneratingField(null);
+    }
   };
 
   const handleGenerate = async () => {
@@ -261,7 +294,27 @@ export const DocumentGenerator: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="executiveSummary">Executive Summary</label>
+                  <div className="field-header">
+                    <label htmlFor="executiveSummary">Executive Summary</label>
+                    <button
+                      type="button"
+                      className="ai-generate-button"
+                      onClick={() => handleGenerateField('executiveSummary')}
+                      disabled={generatingField !== null}
+                      title="Generate with AI"
+                    >
+                      {generatingField === 'executiveSummary' ? (
+                        <>
+                          <span className="spinner-small"></span>
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          ✨ Generate with AI
+                        </>
+                      )}
+                    </button>
+                  </div>
                   <textarea
                     id="executiveSummary"
                     name="executiveSummary"
@@ -273,7 +326,27 @@ export const DocumentGenerator: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="introduction">Introduction</label>
+                  <div className="field-header">
+                    <label htmlFor="introduction">Introduction</label>
+                    <button
+                      type="button"
+                      className="ai-generate-button"
+                      onClick={() => handleGenerateField('introduction')}
+                      disabled={generatingField !== null}
+                      title="Generate with AI"
+                    >
+                      {generatingField === 'introduction' ? (
+                        <>
+                          <span className="spinner-small"></span>
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          ✨ Generate with AI
+                        </>
+                      )}
+                    </button>
+                  </div>
                   <textarea
                     id="introduction"
                     name="introduction"
@@ -285,7 +358,27 @@ export const DocumentGenerator: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="findings">Findings</label>
+                  <div className="field-header">
+                    <label htmlFor="findings">Findings</label>
+                    <button
+                      type="button"
+                      className="ai-generate-button"
+                      onClick={() => handleGenerateField('findings')}
+                      disabled={generatingField !== null}
+                      title="Generate with AI"
+                    >
+                      {generatingField === 'findings' ? (
+                        <>
+                          <span className="spinner-small"></span>
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          ✨ Generate with AI
+                        </>
+                      )}
+                    </button>
+                  </div>
                   <textarea
                     id="findings"
                     name="findings"
@@ -297,7 +390,27 @@ export const DocumentGenerator: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="recommendations">Recommendations</label>
+                  <div className="field-header">
+                    <label htmlFor="recommendations">Recommendations</label>
+                    <button
+                      type="button"
+                      className="ai-generate-button"
+                      onClick={() => handleGenerateField('recommendations')}
+                      disabled={generatingField !== null}
+                      title="Generate with AI"
+                    >
+                      {generatingField === 'recommendations' ? (
+                        <>
+                          <span className="spinner-small"></span>
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          ✨ Generate with AI
+                        </>
+                      )}
+                    </button>
+                  </div>
                   <textarea
                     id="recommendations"
                     name="recommendations"
@@ -458,11 +571,44 @@ export const DocumentGenerator: React.FC = () => {
           gap: 1rem;
         }
 
+        .field-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
         label {
           display: block;
-          margin-bottom: 0.5rem;
           font-weight: 600;
           color: #2d3748;
+          margin: 0;
+        }
+
+        .ai-generate-button {
+          padding: 0.5rem 1rem;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          border-radius: 0.375rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          white-space: nowrap;
+        }
+
+        .ai-generate-button:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .ai-generate-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
 
         input,
@@ -515,6 +661,16 @@ export const DocumentGenerator: React.FC = () => {
           display: inline-block;
           width: 1rem;
           height: 1rem;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top-color: white;
+          border-radius: 50%;
+          animation: spin 0.6s linear infinite;
+        }
+
+        .spinner-small {
+          display: inline-block;
+          width: 0.875rem;
+          height: 0.875rem;
           border: 2px solid rgba(255, 255, 255, 0.3);
           border-top-color: white;
           border-radius: 50%;

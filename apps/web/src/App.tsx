@@ -2,23 +2,42 @@
  * Main App Component
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import DocumentGenerator from './components/DocumentGenerator';
+import { SettingsModal } from './components/SettingsModal';
 
 function App() {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   return (
     <div className="app">
       <header className="app-header">
         <div className="container">
-          <h1 className="logo">Urban Planning Platform</h1>
-          <nav>
-            <a href="#generator">Document Generator</a>
-            <a href="#maps">Maps</a>
-            <a href="#transit">Transit</a>
-            <a href="#forecasting">Forecasting</a>
-          </nav>
+          <div className="header-content">
+            <h1 className="logo">Urban Planning Platform</h1>
+            <div className="header-right">
+              <nav>
+                <a href="#generator">Document Generator</a>
+                <a href="#maps">Maps</a>
+                <a href="#transit">Transit</a>
+                <a href="#forecasting">Forecasting</a>
+              </nav>
+              <button
+                className="settings-button"
+                onClick={() => setIsSettingsOpen(true)}
+                title="LLM Settings"
+              >
+                ⚙️ Settings
+              </button>
+            </div>
+          </div>
         </div>
       </header>
+
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
 
       <main>
         <DocumentGenerator />
@@ -65,10 +84,21 @@ function App() {
           padding: 0 1rem;
         }
 
+        .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .header-right {
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+        }
+
         .logo {
           font-size: 1.5rem;
           font-weight: 700;
-          margin-bottom: 0.5rem;
         }
 
         nav {
@@ -85,6 +115,23 @@ function App() {
 
         nav a:hover {
           color: white;
+        }
+
+        .settings-button {
+          background-color: #4299e1;
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          white-space: nowrap;
+        }
+
+        .settings-button:hover {
+          background-color: #3182ce;
         }
 
         main {

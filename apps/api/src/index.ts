@@ -14,6 +14,7 @@ dotenv.config();
 
 // Import routes
 import documentRoutes from './routes/documents';
+import llmRoutes from './routes/llm';
 
 const app = express();
 const PORT = process.env.API_PORT || 3000;
@@ -42,6 +43,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/documents', documentRoutes);
+app.use('/api/llm', llmRoutes);
 
 // 404 handler
 app.use((req, res) => {
