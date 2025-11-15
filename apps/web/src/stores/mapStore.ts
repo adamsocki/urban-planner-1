@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Map as MapboxMap, LngLatBoundsLike, LngLatLike } from 'mapbox-gl';
-import type { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import type { Feature, FeatureCollection } from 'geojson';
 
 export type DrawMode = 'point' | 'line' | 'polygon' | 'none';
 export type MapStyle = 'streets' | 'satellite' | 'light' | 'dark' | 'outdoors';

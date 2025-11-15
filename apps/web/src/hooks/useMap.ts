@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useMapStore } from '../stores/mapStore';
-import type { MapMouseEvent, MapLayerMouseEvent } from 'mapbox-gl';
-import type { Feature, Point } from 'geojson';
+import type { MapMouseEvent } from 'mapbox-gl';
+import type { Feature } from 'geojson';
 import { createPoint } from '../lib/mapUtils';
 
 /**
@@ -39,7 +39,7 @@ export const useMapInteractions = () => {
         const feature = features[0];
         setSelectedFeature({
           feature: feature as Feature,
-          layerId: feature.layer.id,
+          layerId: feature.layer?.id || '',
           coordinates: [lng, lat],
         });
       } else {
@@ -136,7 +136,6 @@ export const useDrawing = () => {
   const {
     drawMode,
     drawingFeatures,
-    addDrawingFeature,
     removeDrawingFeature,
     clearDrawing,
     setDrawMode,
