@@ -15,23 +15,76 @@ function App() {
         <div className="container">
           <h1 className="logo">Urban Planning Platform</h1>
           <nav>
-            <a href="#generator">Document Generator</a>
-            <a href="#maps">Maps</a>
-            <a href="#transit">Transit</a>
-            <a href="#forecasting">Forecasting</a>
+            <button
+              onClick={() => setActiveTab('map')}
+              className={activeTab === 'map' ? 'active' : ''}
+            >
+              <Map size={16} />
+              Maps
+            </button>
+            <button
+              onClick={() => setActiveTab('documents')}
+              className={activeTab === 'documents' ? 'active' : ''}
+            >
+              <FileText size={16} />
+              Documents
+            </button>
           </nav>
         </div>
       </header>
 
-      <main>
-        <DocumentGenerator />
+      {activeTab === 'map' && (
+        <div className="map-toolbar">
+          <div className="container">
+            <div className="toolbar-buttons">
+              <button
+                onClick={toggleLayerControl}
+                className={showLayerControl ? 'active' : ''}
+                title="Toggle Layer Control"
+              >
+                <Layers size={16} />
+                Layers
+              </button>
+              <button
+                onClick={toggleDrawingTools}
+                className={showDrawingTools ? 'active' : ''}
+                title="Toggle Drawing Tools"
+              >
+                <Pencil size={16} />
+                Draw
+              </button>
+              <button
+                onClick={toggleFeatureInfo}
+                className={showFeatureInfo ? 'active' : ''}
+                title="Toggle Feature Info"
+              >
+                <Info size={16} />
+                Info
+              </button>
+              <button
+                onClick={toggleGTFSViewer}
+                className={showGTFSViewer ? 'active' : ''}
+                title="Toggle GTFS Viewer"
+              >
+                <Bus size={16} />
+                Transit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <main className={activeTab === 'map' ? 'no-padding' : ''}>
+        {activeTab === 'map' ? <MapCanvas /> : <DocumentGenerator />}
       </main>
 
-      <footer className="app-footer">
-        <div className="container">
-          <p>&copy; 2025 Urban Planning Platform. Built with React, TypeScript, and Mapbox.</p>
-        </div>
-      </footer>
+      {activeTab !== 'map' && (
+        <footer className="app-footer">
+          <div className="container">
+            <p>&copy; 2025 Urban Planning Platform. Built with React, TypeScript, and Mapbox.</p>
+          </div>
+        </footer>
+      )}
 
       <ThemeSwitcher />
 
@@ -87,7 +140,7 @@ function App() {
         }
 
         .container {
-          max-width: 1200px;
+          max-width: 1400px;
           margin: 0 auto;
           padding: 0 var(--spacing-medium);
         }
@@ -127,6 +180,10 @@ function App() {
           flex: 1;
           padding: var(--spacing-large) 0;
           background: var(--color-backgroundSecondary);
+        }
+
+        main.no-padding {
+          padding: 0;
         }
 
         .app-footer {
