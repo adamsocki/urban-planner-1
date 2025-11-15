@@ -5,7 +5,7 @@
  * https://gtfs.org/schedule/reference/
  */
 
-import { GTFSFeed, ValidationResult, ValidationError, FeedStats, RouteType } from './types';
+import { GTFSFeed, ValidationResult, ValidationError, ValidationWarning, FeedStats, RouteType } from './types';
 
 export function validateGTFS(feed: GTFSFeed): ValidationResult {
   const errors: ValidationError[] = [];
@@ -255,7 +255,7 @@ export function validateGTFS(feed: GTFSFeed): ValidationResult {
   return {
     valid: errors.length === 0,
     errors,
-    warnings,
+    warnings: warnings.filter(w => w.severity === 'warning') as ValidationWarning[],
     stats,
   };
 }

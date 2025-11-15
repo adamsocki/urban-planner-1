@@ -9,6 +9,7 @@ const ThemeSwitcher: React.FC = () => {
   const themeList = Object.values(availableThemes);
 
   const handleThemeChange = (id: ThemeId) => {
+    console.log('Switching to theme:', id);
     setThemeId(id);
     setIsOpen(false);
   };
@@ -20,7 +21,7 @@ const ThemeSwitcher: React.FC = () => {
           position: fixed;
           bottom: var(--spacing-medium, 24px);
           right: var(--spacing-medium, 24px);
-          z-index: 1000;
+          z-index: 10000;
         }
 
         .theme-switcher-button {
@@ -38,6 +39,8 @@ const ThemeSwitcher: React.FC = () => {
           font-size: 24px;
           transition: var(--effect-transition);
           font-family: var(--typography-fontFamily);
+          position: relative;
+          z-index: 10001;
         }
 
         .theme-switcher-button:hover {
@@ -62,6 +65,7 @@ const ThemeSwitcher: React.FC = () => {
           transform: translateY(20px) scale(0.95);
           pointer-events: none;
           transition: var(--effect-transition);
+          z-index: 10002;
         }
 
         .theme-switcher-panel.open {
@@ -102,12 +106,15 @@ const ThemeSwitcher: React.FC = () => {
           cursor: pointer;
           transition: var(--effect-transition);
           background: var(--color-backgroundSecondary);
+          pointer-events: all;
+          user-select: none;
         }
 
         .theme-option:hover {
           border-color: var(--color-primary);
           box-shadow: var(--shadow-hover);
           transform: translateX(-4px);
+          background: var(--color-surface);
         }
 
         .theme-option.active {
@@ -152,7 +159,7 @@ const ThemeSwitcher: React.FC = () => {
           left: 0;
           right: 0;
           bottom: 0;
-          z-index: 999;
+          z-index: 9999;
           display: none;
         }
 

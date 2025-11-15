@@ -32,6 +32,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const theme = themes[themeId];
 
   useEffect(() => {
+    console.log('Theme changed to:', themeId);
     localStorage.setItem('theme-id', themeId);
   }, [themeId]);
 
