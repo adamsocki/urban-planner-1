@@ -1,39 +1,55 @@
 # Dependencies
 node_modules/
 pnpm-lock.yaml
+<<<<<<< HEAD
 .pnpm-store/
+=======
+>>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
 package-lock.json
 yarn.lock
 
 # Build outputs
 dist/
 build/
+<<<<<<< HEAD
 .turbo/
 *.tsbuildinfo
 out/
+=======
+*.tsbuildinfo
+>>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+<<<<<<< HEAD
 .env.production.local
 .env.development.local
 
 # IDE & Editor
+=======
+
+# IDE
+>>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+<<<<<<< HEAD
 .vscode-server/
 *.iml
+=======
+>>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
 
 # Logs
 logs/
 *.log
 npm-debug.log*
 pnpm-debug.log*
+<<<<<<< HEAD
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
@@ -133,3 +149,16 @@ cache/
 # Any local overrides
 .local/
 *.local.*
+=======
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Prisma
+.prisma/
+
+# Temp files
+*.tmp
+.cache/
+>>>>>>> 05ddba80814afa1904e488509bc28c3e1da0c5d6
