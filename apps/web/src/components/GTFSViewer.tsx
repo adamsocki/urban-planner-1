@@ -4,7 +4,7 @@ import { Bus, X, Upload, Eye, EyeOff } from 'lucide-react';
 import type { FeatureCollection } from 'geojson';
 
 const GTFSViewer: React.FC = () => {
-  const { gtfsData, setGTFSData, clearGTFSData, toggleGTFSViewer, addLayer, updateLayer, toggleLayerVisibility, layers } =
+  const { gtfsData, setGTFSData, clearGTFSData, toggleGTFSViewer, addLayer, updateLayer, toggleLayerVisibility, removeLayer, layers } =
     useMapStore();
 
   const handleFileUpload = async (
@@ -50,6 +50,16 @@ const GTFSViewer: React.FC = () => {
   const getLayerVisibility = (type: 'routes' | 'stops' | 'shapes'): boolean => {
     const layer = layers.find(l => l.id === `gtfs-${type}`);
     return layer?.visible ?? true;
+  };
+
+  // Handle clearing all GTFS data and associated layers
+  const handleClearGTFSData = () => {
+    // Remove GTFS layers from the layer store
+    removeLayer('gtfs-routes');
+    removeLayer('gtfs-stops');
+    removeLayer('gtfs-shapes');
+    // Clear GTFS data from the store
+    clearGTFSData();
   };
 
   const hasGTFSData = gtfsData.routes || gtfsData.stops || gtfsData.shapes;
@@ -190,7 +200,7 @@ const GTFSViewer: React.FC = () => {
         {/* Clear All Button */}
         {hasGTFSData && (
           <button
-            onClick={clearGTFSData}
+            onClick={handleClearGTFSData}
             className="w-full px-3 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
           >
             Clear All GTFS Data
