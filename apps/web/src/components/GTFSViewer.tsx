@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useMapStore } from '../stores/mapStore';
 import { Bus, X, Upload, Eye, EyeOff } from 'lucide-react';
 import type { FeatureCollection } from 'geojson';
 
 const GTFSViewer: React.FC = () => {
-  const { gtfsData, setGTFSData, clearGTFSData, toggleGTFSViewer, addLayer } =
+  const { gtfsData, setGTFSData, clearGTFSData, toggleGTFSViewer, addLayer, updateLayer, toggleLayerVisibility, removeLayer, layers } =
     useMapStore();
-
-  const [showRoutes, setShowRoutes] = useState(true);
-  const [showStops, setShowStops] = useState(true);
-  const [showShapes, setShowShapes] = useState(true);
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -24,20 +20,46 @@ const GTFSViewer: React.FC = () => {
 
       setGTFSData(type, geojson);
 
-      // Also add as a layer
-      addLayer({
-        id: `gtfs-${type}-${Date.now()}`,
-        name: `GTFS ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-        type: 'gtfs',
-        visible: true,
-        opacity: 1,
-        data: geojson,
-        color: type === 'routes' ? '#2563EB' : type === 'stops' ? '#DC2626' : '#059669',
-      });
+      // Use stable layer ID
+      const layerId = `gtfs-${type}`;
+      
+      // Check if layer already exists and update it, otherwise add new layer
+      const existingLayer = layers.find(l => l.id === layerId);
+      if (existingLayer) {
+        // Update existing layer data
+        updateLayer(layerId, { data: geojson });
+      } else {
+        // Add as a new layer with stable ID
+        addLayer({
+          id: layerId,
+          name: `GTFS ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+          type: 'gtfs',
+          visible: true,
+          opacity: 1,
+          data: geojson,
+          color: type === 'routes' ? '#2563EB' : type === 'stops' ? '#DC2626' : '#059669',
+        });
+      }
     } catch (error) {
       console.error(`Error loading GTFS ${type}:`, error);
       alert(`Failed to load GTFS ${type} file. Please check the file format.`);
     }
+  };
+
+  // Helper function to get layer visibility from store
+  const getLayerVisibility = (type: 'routes' | 'stops' | 'shapes'): boolean => {
+    const layer = layers.find(l => l.id === `gtfs-${type}`);
+    return layer?.visible ?? true;
+  };
+
+  // Handle clearing all GTFS data and associated layers
+  const handleClearGTFSData = () => {
+    // Remove GTFS layers from the layer store
+    removeLayer('gtfs-routes');
+    removeLayer('gtfs-stops');
+    removeLayer('gtfs-shapes');
+    // Clear GTFS data from the store
+    clearGTFSData();
   };
 
   const hasGTFSData = gtfsData.routes || gtfsData.stops || gtfsData.shapes;
@@ -70,10 +92,10 @@ const GTFSViewer: React.FC = () => {
               </div>
               {gtfsData.routes && (
                 <button
-                  onClick={() => setShowRoutes(!showRoutes)}
+                  onClick={() => toggleLayerVisibility('gtfs-routes')}
                   className="p-1 hover:bg-blue-100 rounded"
                 >
-                  {showRoutes ? <Eye size={14} /> : <EyeOff size={14} />}
+                  {getLayerVisibility('routes') ? <Eye size={14} /> : <EyeOff size={14} />}
                 </button>
               )}
             </div>
@@ -105,10 +127,10 @@ const GTFSViewer: React.FC = () => {
               </div>
               {gtfsData.stops && (
                 <button
-                  onClick={() => setShowStops(!showStops)}
+                  onClick={() => toggleLayerVisibility('gtfs-stops')}
                   className="p-1 hover:bg-red-100 rounded"
                 >
-                  {showStops ? <Eye size={14} /> : <EyeOff size={14} />}
+                  {getLayerVisibility('stops') ? <Eye size={14} /> : <EyeOff size={14} />}
                 </button>
               )}
             </div>
@@ -140,10 +162,10 @@ const GTFSViewer: React.FC = () => {
               </div>
               {gtfsData.shapes && (
                 <button
-                  onClick={() => setShowShapes(!showShapes)}
+                  onClick={() => toggleLayerVisibility('gtfs-shapes')}
                   className="p-1 hover:bg-green-100 rounded"
                 >
-                  {showShapes ? <Eye size={14} /> : <EyeOff size={14} />}
+                  {getLayerVisibility('shapes') ? <Eye size={14} /> : <EyeOff size={14} />}
                 </button>
               )}
             </div>
@@ -178,7 +200,7 @@ const GTFSViewer: React.FC = () => {
         {/* Clear All Button */}
         {hasGTFSData && (
           <button
-            onClick={clearGTFSData}
+            onClick={handleClearGTFSData}
             className="w-full px-3 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
           >
             Clear All GTFS Data
